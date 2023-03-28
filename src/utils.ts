@@ -82,3 +82,16 @@ export function stripNonAscii(str: string) {
 export function md5(str: string) {
 	return crypto.createHash('md5').update(str).digest('hex');
 }
+
+export function encode(text: string) {
+	return Uint8Array.from(Buffer.from(text));
+}
+
+export function signAsync(algo: string, data: string, key: string) {
+	return new Promise<string>((resolve, reject) => {
+		crypto.sign(algo, encode(data), key, (err, out) => {
+			if (err) return reject(err);
+			return resolve(out.toString('hex'));
+		});
+	});
+}
